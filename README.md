@@ -95,7 +95,7 @@ corepack pnpm typecheck       # Run the TypeScript compiler without emitting fil
 corepack pnpm build           # Generate content and build the frontend
 ```
 
-Before opening a pull request, run the content build, tests, lint, typecheck, and production build. CI runs the same checks and then builds and smoke-tests the Docker image.
+Before opening a pull request, run the content build, tests, lint, typecheck, and production build. CI runs the same checks and then builds and smoke-tests the Docker image. Every version tag also runs the release workflow.
 
 ## Docker
 
@@ -107,6 +107,16 @@ docker run --rm -p 8080:8080 tech-radar
 ```
 
 The image serves the compiled static site through nginx. The health endpoint is available at `/healthz`.
+
+## Releases
+
+Stable tags use the `vX.Y.Z` format. Pushing a matching tag validates the tag against `package.json`, runs the full verification suite, publishes the versioned image to GHCR, and creates a GitHub Release with the commits since the previous tag.
+
+```bash
+docker pull ghcr.io/caffeinatedpinguin/tech-radar:vX.Y.Z
+```
+
+Published images are available in the [GitHub Container Registry package](https://github.com/CaffeinatedPinguin/tech-radar/pkgs/container/tech-radar), and releases are listed on the [GitHub Releases page](https://github.com/CaffeinatedPinguin/tech-radar/releases).
 
 ## Branding
 
