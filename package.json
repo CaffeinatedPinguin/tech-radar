@@ -15,8 +15,8 @@
     "build": "npm run content:build && vite build && tsc -b --noEmit",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix --max-warnings 0",
     "test": "vitest run",
     "test:watch": "vitest",
     "validate": "npm run content:build"
