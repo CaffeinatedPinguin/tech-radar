@@ -17,11 +17,15 @@ export default tseslint.config(
     plugins: {'react-hooks': reactHooks, 'react-refresh': reactRefresh},
     rules: {
       ...reactHooks.configs['recommended-latest'].rules,
+      curly: ['error', 'all'],
       'react-refresh/only-export-components': ['warn', {allowConstantExport: true}],
     },
   },
   {
     files: ['**/*.mjs'],
     languageOptions: {globals: globals.node},
+    rules: {
+      curly: ['error', 'all'],
+    },
   },
 );

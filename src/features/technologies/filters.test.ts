@@ -3,8 +3,36 @@ import type {Technology} from '../../domain/content';
 import {filterTechnologies, filtersFromParams, searchableTechnology} from './filters';
 
 const technologies: Technology[] = [
-  {id: 'zabbix', name: 'Zabbix', area: 'security', ring: 'adopt', usage: 'current', description: 'Central monitoring', introduced: '2026-01-01', lastReviewed: '2026-01-02', tags: ['monitoring'], replaces: [], replacedBy: [], history: [], adrs: []},
-  {id: 'redis', name: 'Redis', area: 'data', ring: 'trial', usage: 'candidate', description: 'In-memory cache', introduced: '2026-01-01', lastReviewed: '2026-01-02', tags: ['cache'], replaces: [], replacedBy: [], history: [], adrs: []},
+  {
+    id: 'zabbix',
+    name: 'Zabbix',
+    area: 'security',
+    ring: 'adopt',
+    usage: 'current',
+    description: 'Central monitoring',
+    introduced: '2026-01-01',
+    lastReviewed: '2026-01-02',
+    tags: ['monitoring'],
+    replaces: [],
+    replacedBy: [],
+    history: [],
+    adrs: [],
+  },
+  {
+    id: 'redis',
+    name: 'Redis',
+    area: 'data',
+    ring: 'trial',
+    usage: 'candidate',
+    description: 'In-memory cache',
+    introduced: '2026-01-01',
+    lastReviewed: '2026-01-02',
+    tags: ['cache'],
+    replaces: [],
+    replacedBy: [],
+    history: [],
+    adrs: [],
+  },
 ];
 
 describe('technology filters', () => {

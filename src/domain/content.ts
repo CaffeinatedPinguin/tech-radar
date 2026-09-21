@@ -36,10 +36,19 @@ const adrSchema = z.object({
   technologies: z.array(z.string()),
   context: z.string(),
   decision: z.string(),
-  alternatives: z.array(z.object({name: z.string(), reason: z.string()})),
-  consequences: z.object({positive: z.array(z.string()), negative: z.array(z.string())}),
+  alternatives: z.array(z.object({
+    name: z.string(),
+    reason: z.string(),
+  })),
+  consequences: z.object({
+    positive: z.array(z.string()),
+    negative: z.array(z.string()),
+  }),
   revisitWhen: z.array(z.string()),
-  links: z.array(z.object({label: z.string(), url: z.string()})),
+  links: z.array(z.object({
+    label: z.string(),
+    url: z.string(),
+  })),
   supersedes: z.string().optional(),
   supersededBy: z.string().optional(),
 });
@@ -48,7 +57,10 @@ export const contentSchema = z.object({
   schemaVersion: z.literal(1),
   radar: z.object({
     title: z.string(),
-    areas: z.array(z.object({id: z.enum(AREAS), name: z.string()})),
+    areas: z.array(z.object({
+      id: z.enum(AREAS),
+      name: z.string(),
+    })),
   }),
   technologies: z.array(technologySchema),
   adrs: z.array(adrSchema),
