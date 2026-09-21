@@ -1,4 +1,4 @@
-import {readdir, readFile, writeFile} from 'node:fs/promises';
+import {mkdir, readdir, readFile, writeFile} from 'node:fs/promises';
 import {join, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import YAML from 'yaml';
@@ -169,6 +169,7 @@ async function main() {
   }
   const derived = derive(technologies, adrs);
   const content = {schemaVersion: 1, radar: radarResult.data, ...derived};
+  await mkdir(join(root, 'public', 'content'), {recursive: true});
   await writeFile(outputPath, `${JSON.stringify(content, null, 2)}\n`, 'utf8');
   console.log(`Generated ${relative(root, outputPath).replaceAll('\\', '/')} (${technologies.length} technologies, ${adrs.length} ADRs)`);
 }
