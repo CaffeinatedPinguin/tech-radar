@@ -1,0 +1,18 @@
+id: ADR-003
+title: Use Kubernetes as the default orchestrator
+status: superseded
+date: 2025-06-18
+technologies:
+  - kubernetes
+context: The platform was considered as a standard orchestrator before the current service footprint was measured.
+decision: Keep Kubernetes as the default direction for all workloads.
+alternatives:
+  - name: Docker Compose
+    reason: Considered too limited for the expected future platform size.
+consequences:
+  positive:
+    - Broad ecosystem
+  negative:
+    - Higher operational cost
+revisitWhen:
+  - A future platform review changes the workload assumptions

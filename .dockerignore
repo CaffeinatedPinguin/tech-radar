@@ -1,0 +1,14 @@
+node_modules
+.pnpm-store
+coverage
+build
+tmp
+*.local
+*.local.js
+.git
+.github
+.idea
+.vscode
+.env
+README.md
+Tech-Radar-Implementation-Plan.md

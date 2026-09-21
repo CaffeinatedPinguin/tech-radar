@@ -1,0 +1,19 @@
+id: redis
+name: Redis
+area: data
+ring: trial
+usage: current
+description: Fast in-memory data structure store used for caching and short-lived coordination.
+introduced: 2025-02-04
+lastReviewed: 2026-09-17
+tags:
+  - cache
+  - key-value
+website: https://redis.io/
+history:
+  - date: 2025-02-04
+    ring: assess
+    usage: candidate
+  - date: 2026-09-17
+    ring: trial
+    usage: current

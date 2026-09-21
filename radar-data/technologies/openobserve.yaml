@@ -1,0 +1,12 @@
+id: openobserve
+name: OpenObserve
+area: security
+ring: assess
+usage: candidate
+description: Log and observability platform under evaluation for teams that need a simpler all-in-one view.
+introduced: 2026-09-16
+lastReviewed: 2026-09-20
+tags:
+  - logs
+  - observability
+website: https://openobserve.ai/

@@ -1,0 +1,11 @@
+schemaVersion: 1
+title: Homelab Tech Radar
+areas:
+  - id: development
+    name: Development
+  - id: platform
+    name: Platform & Infrastructure
+  - id: data
+    name: Data & Integration
+  - id: security
+    name: Security & Observability

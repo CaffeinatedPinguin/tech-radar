@@ -1,0 +1,20 @@
+id: docker-compose
+name: Docker Compose
+area: platform
+ring: adopt
+usage: current
+description: Default orchestration surface for small homelab services and repeatable local environments.
+introduced: 2023-01-15
+lastReviewed: 2026-09-19
+tags:
+  - containers
+  - orchestration
+  - operations
+website: https://docs.docker.com/compose/
+history:
+  - date: 2023-01-15
+    ring: trial
+    usage: candidate
+  - date: 2023-03-02
+    ring: adopt
+    usage: current

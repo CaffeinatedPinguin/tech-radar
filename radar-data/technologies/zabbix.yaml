@@ -1,0 +1,21 @@
+id: zabbix
+name: Zabbix
+area: security
+ring: adopt
+usage: current
+description: Central monitoring platform for infrastructure metrics, availability and security events.
+introduced: 2026-09-20
+lastReviewed: 2026-09-21
+tags:
+  - monitoring
+  - observability
+  - security
+website: https://www.zabbix.com/
+history:
+  - date: 2026-09-16
+    ring: assess
+    usage: candidate
+  - date: 2026-09-20
+    ring: adopt
+    usage: current
+    adr: ADR-001

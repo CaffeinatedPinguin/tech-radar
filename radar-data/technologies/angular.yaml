@@ -1,0 +1,12 @@
+id: angular
+name: Angular
+area: development
+ring: hold
+usage: previous
+description: Previous frontend framework choice retained only for existing applications.
+introduced: 2022-05-14
+lastReviewed: 2026-07-01
+tags:
+  - frontend
+  - typescript
+website: https://angular.dev/

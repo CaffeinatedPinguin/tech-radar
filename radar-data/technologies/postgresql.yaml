@@ -1,0 +1,20 @@
+id: postgresql
+name: PostgreSQL
+area: data
+ring: adopt
+usage: current
+description: Reliable relational storage for services that need strong consistency and expressive queries.
+introduced: 2024-03-12
+lastReviewed: 2026-09-18
+tags:
+  - database
+  - relational
+  - sql
+website: https://www.postgresql.org/
+history:
+  - date: 2024-03-03
+    ring: trial
+    usage: candidate
+  - date: 2024-03-12
+    ring: adopt
+    usage: current

@@ -1,0 +1,12 @@
+id: rabbitmq
+name: RabbitMQ
+area: data
+ring: assess
+usage: candidate
+description: Message broker candidate for workloads that need established routing and delivery semantics.
+introduced: 2026-04-11
+lastReviewed: 2026-09-12
+tags:
+  - messaging
+  - queues
+website: https://www.rabbitmq.com/

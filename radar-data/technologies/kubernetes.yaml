@@ -1,0 +1,13 @@
+id: kubernetes
+name: Kubernetes
+area: platform
+ring: assess
+usage: candidate
+description: Platform option for a future scale point where service scheduling and workload isolation justify the cost.
+introduced: 2025-06-18
+lastReviewed: 2026-09-16
+tags:
+  - containers
+  - orchestration
+  - platform
+website: https://kubernetes.io/

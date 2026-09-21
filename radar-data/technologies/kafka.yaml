@@ -1,0 +1,19 @@
+id: kafka
+name: Apache Kafka
+area: data
+ring: hold
+usage: previous
+description: Previously evaluated event streaming platform; operational cost is too high for the current environment.
+introduced: 2023-08-09
+lastReviewed: 2026-08-20
+tags:
+  - streaming
+  - events
+website: https://kafka.apache.org/
+history:
+  - date: 2023-08-09
+    ring: trial
+    usage: candidate
+  - date: 2026-08-20
+    ring: hold
+    usage: previous

@@ -1,0 +1,12 @@
+id: react
+name: React
+area: development
+ring: adopt
+usage: current
+description: UI library used for interactive web applications and internal engineering tools.
+introduced: 2024-01-20
+lastReviewed: 2026-09-15
+tags:
+  - frontend
+  - typescript
+website: https://react.dev/

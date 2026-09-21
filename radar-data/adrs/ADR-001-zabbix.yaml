@@ -1,0 +1,27 @@
+id: ADR-001
+title: Use Zabbix as the primary monitoring platform
+status: accepted
+date: 2026-09-20
+technologies:
+  - zabbix
+  - openobserve
+context: |
+  The homelab requires central monitoring for approximately eight virtual machines.
+  Operational simplicity and low resource usage are more important than distributed tracing.
+decision: Use Zabbix as the primary monitoring platform.
+alternatives:
+  - name: OpenObserve
+    reason: Interesting option, but currently provides less confidence for long-term homelab operation.
+consequences:
+  positive:
+    - Mature ecosystem
+    - Low operational complexity
+    - Clear alerting model
+  negative:
+    - Less modern UI than some newer platforms
+revisitWhen:
+  - Distributed tracing becomes necessary
+  - Infrastructure grows substantially
+links:
+  - label: Zabbix documentation
+    url: https://www.zabbix.com/documentation/current/

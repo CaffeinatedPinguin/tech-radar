@@ -1,0 +1,22 @@
+id: ADR-002
+title: Prefer Docker Compose for the current service footprint
+status: accepted
+date: 2026-06-01
+technologies:
+  - docker-compose
+  - kubernetes
+context: The current environment is operated by one administrator and contains a small number of services.
+decision: Use Docker Compose as the default deployment format until operational scale changes.
+alternatives:
+  - name: Kubernetes
+    reason: Defer because cluster operations and resource overhead are not justified yet.
+consequences:
+  positive:
+    - Short feedback loop
+    - Easy local reproduction
+  negative:
+    - Fewer scheduling and isolation primitives
+revisitWhen:
+  - The service count grows substantially
+  - High availability becomes a requirement
+supersedes: ADR-003
