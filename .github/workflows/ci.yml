@@ -3,121 +3,64 @@ name: ci
 on:
   push:
     branches: [main]
-  pull_request:
+    tags: ["v*.*.*"]
   workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number to verify (checked out as refs/pull/<n>/head)
+        required: false
+        default: ""
+        type: string
 
+# Tag and branch runs share the SHA-based group: a release tag cancels the CI
+# run for the same commit, while CI never cancels an in-progress release.
 concurrency:
-  group: tech-radar-${{ github.sha }}
-  cancel-in-progress: false
+  group: ci-${{ github.sha }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/tags/') }}
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   verify:
-    name: tech-radar / build and test
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    name: verify
     permissions:
       contents: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 1
-
-      - name: Set up Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 22.20.0
-
-      - name: Cache pnpm store
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-tech-radar-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: pnpm-tech-radar-${{ runner.os }}-
-
-      - name: Enable corepack
-        shell: bash
-        run: |
-          set -euo pipefail
-          npm install -g corepack@0.36.0
-          corepack enable
-          corepack prepare pnpm@12.2.1 --activate
-
-      - name: Install dependencies
-        shell: bash
-        run: corepack pnpm install --frozen-lockfile
-
-      - name: Validate example content
-        shell: bash
-        run: corepack pnpm content:build
-
-      - name: Test
-        shell: bash
-        run: corepack pnpm test
-
-      - name: Lint
-        shell: bash
-        run: corepack pnpm lint
-
-      - name: Typecheck
-        shell: bash
-        run: corepack pnpm typecheck
-
-      - name: Build frontend
-        shell: bash
-        run: corepack pnpm build
-
-      - name: Upload frontend build
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: tech-radar-dist
-          path: dist
-          if-no-files-found: error
-          retention-days: 1
+    uses: CaffeinatedPinguin/templates/.github/workflows/node-ci.yml@19ceee944e703de7ea0291518ada59442f387c96
+    with:
+      # A manual run can verify an untrusted PR head without a pull_request trigger.
+      ref: ${{ github.event.inputs.pr && format('refs/pull/{0}/head', github.event.inputs.pr) || '' }}
+      scripts: content:build test lint typecheck build
+      node-version-file: .nvmrc
+      artifact-name: dist
+      artifact-path: dist
+      check-release-tag: true
 
   docker:
-    name: tech-radar / docker smoke test
+    name: docker
     needs: verify
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
     permissions:
       contents: read
-    steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-          fetch-depth: 1
+      packages: write
+    uses: CaffeinatedPinguin/templates/.github/workflows/docker.yml@19ceee944e703de7ea0291518ada59442f387c96
+    with:
+      image-name: tech-radar
+      # Build the Dockerfile and dist from the same commit as verify.
+      ref: ${{ github.event.inputs.pr && format('refs/pull/{0}/head', github.event.inputs.pr) || '' }}
+      context: .
+      dockerfile: Dockerfile
+      target: runtime-prebuild
+      artifact-name: dist
+      artifact-path: dist
+      smoke-paths: / /content/content.json /logo/logo.svg
+      push: ${{ startsWith(github.ref, 'refs/tags/') }}
 
-      - name: Download frontend build
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
-        with:
-          name: tech-radar-dist
-          path: dist
-
-      - name: Build image without publishing
-        shell: bash
-        run: docker build --pull --target runtime-prebuild --tag local/tech-radar:ci .
-
-      - name: Smoke test served image
-        shell: bash
-        run: |
-          set -euo pipefail
-          docker run --rm -d -p 18080:8080 --name tech-radar-smoke local/tech-radar:ci
-          trap 'docker rm -f tech-radar-smoke >/dev/null 2>&1 || true' EXIT
-
-          for attempt in $(seq 1 30); do
-            if docker exec tech-radar-smoke wget -qO- http://127.0.0.1:8080/healthz >/dev/null 2>&1; then
-              break
-            fi
-            sleep 1
-          done
-
-          health="$(docker exec tech-radar-smoke wget -qO- http://127.0.0.1:8080/healthz)"
-          test "$health" = "ok"
-          docker exec tech-radar-smoke wget -qO- http://127.0.0.1:8080/content/content.json | grep -q '"schemaVersion": 1'
-          docker exec tech-radar-smoke wget -qO- http://127.0.0.1:8080/logo/logo.svg | grep -q '<svg'
+  release:
+    name: release
+    needs: docker
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    uses: CaffeinatedPinguin/templates/.github/workflows/release.yml@19ceee944e703de7ea0291518ada59442f387c96
+    with:
+      title-prefix: "Tech Radar "
+      image-name: tech-radar
