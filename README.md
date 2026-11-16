@@ -97,6 +97,8 @@ corepack pnpm build           # Generate content and build the frontend
 
 Before opening a pull request, run the content build, tests, lint, typecheck, and production build. CI runs the same checks and then builds and smoke-tests the Docker image. Every version tag also runs the release workflow.
 
+CI runs on every pull request and on pushes to `main`. A pull request can be merged only when the single required check `ci-required` is green. Dependabot keeps GitHub Actions, npm dependencies, and the Docker image up to date.
+
 ## Docker
 
 Build and run the production image:
@@ -128,6 +130,8 @@ The header and favicon use the Smrodek logo from `public/logo/logo.svg`. The hea
 2. Run `corepack pnpm content:build` and review the generated result locally.
 3. Run the complete verification commands listed above.
 4. Keep changes small, explicit, and easy to review.
+
+Bug reports and feature requests go through issues. Pull requests from outside contributors are not accepted (only collaborators can open them); see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Content can describe internal architecture, so check the repository visibility and deployment target before publishing new records.
 

@@ -1,9 +1,18 @@
 name: ci
 
+# Single thin caller for the project CI: verify (content build, test, lint,
+# typecheck, build), Docker image build with a smoke test, and the tag-driven
+# release.
+# Tag runs share the SHA-based group with branch runs: a release tag cancels the
+# CI run for the same commit, while CI never cancels an in-progress release.
+# Pull requests are "Collaborators only"; PR runs never receive secrets, and the
+# registry push and release jobs only run for tags.
 on:
   push:
     branches: [main]
     tags: ["v*.*.*"]
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
     inputs:
       pr:
@@ -12,8 +21,6 @@ on:
         default: ""
         type: string
 
-# Tag and branch runs share the SHA-based group: a release tag cancels the CI
-# run for the same commit, while CI never cancels an in-progress release.
 concurrency:
   group: ci-${{ github.sha }}
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/tags/') }}
@@ -25,7 +32,7 @@ jobs:
     name: verify
     permissions:
       contents: read
-    uses: CaffeinatedPinguin/templates/.github/workflows/node-ci.yml@45b1bf131eb8f02a3c0f5aedb7c57db6d7a2292f
+    uses: CaffeinatedPinguin/templates/.github/workflows/node-ci.yml@5491a12df1b2726588c95517f6790aeb7e332b63
     with:
       # A manual run can verify an untrusted PR head without a pull_request trigger.
       ref: ${{ github.event.inputs.pr && format('refs/pull/{0}/head', github.event.inputs.pr) || '' }}
@@ -41,7 +48,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: CaffeinatedPinguin/templates/.github/workflows/docker.yml@45b1bf131eb8f02a3c0f5aedb7c57db6d7a2292f
+    uses: CaffeinatedPinguin/templates/.github/workflows/docker.yml@5491a12df1b2726588c95517f6790aeb7e332b63
     with:
       image-name: tech-radar
       # Build the Dockerfile and dist from the same commit as verify.
@@ -60,7 +67,40 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: write
-    uses: CaffeinatedPinguin/templates/.github/workflows/release.yml@45b1bf131eb8f02a3c0f5aedb7c57db6d7a2292f
+    uses: CaffeinatedPinguin/templates/.github/workflows/release.yml@5491a12df1b2726588c95517f6790aeb7e332b63
     with:
       title-prefix: "Tech Radar "
       image-name: tech-radar
+
+  conventions:
+    name: conventions
+    if: github.event_name == 'pull_request'
+    permissions: {}
+    uses: CaffeinatedPinguin/templates/.github/workflows/conventions.yml@5491a12df1b2726588c95517f6790aeb7e332b63
+
+  dependency-review:
+    name: dependency-review
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: CaffeinatedPinguin/templates/.github/workflows/dependency-review.yml@5491a12df1b2726588c95517f6790aeb7e332b63
+    with:
+      fail-on-severity: high
+
+  # The baseline required check. It never fails the run itself for a skipped
+  # job, but fails when any needed job failed or was cancelled.
+  ci-required:
+    name: ci-required
+    if: always()
+    needs: [conventions, dependency-review, verify, docker, release]
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    permissions: {}
+    steps:
+      - name: All jobs green
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          for r in $RESULTS; do
+            [[ "$r" == success || "$r" == skipped ]] || { echo "::error::job result: $r"; exit 1; }
+          done
