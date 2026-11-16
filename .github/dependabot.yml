@@ -2,6 +2,7 @@
 # each major separately (you read the changelog). Cooldown 7 days (14 for major
 # npm updates) - new versions "sit" for a while, protection against hijacked packages.
 # Security updates arrive immediately, regardless of schedule and groups.
+# security updates are grouped into one pull request per ecosystem; each major version update stays separate.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -16,6 +17,9 @@ updates:
         applies-to: version-updates
         patterns: ["*"]
         update-types: [minor, patch]
+      security:
+        applies-to: security-updates
+        patterns: ["*"]
     labels: [dependencies]
     commit-message:
       prefix: chore
@@ -34,6 +38,9 @@ updates:
         applies-to: version-updates
         patterns: ["*"]
         update-types: [minor, patch]
+      security:
+        applies-to: security-updates
+        patterns: ["*"]
     labels: [dependencies]
     commit-message:
       prefix: chore
@@ -47,6 +54,10 @@ updates:
     cooldown:
       # default-days is the only cooldown option this ecosystem supports
       default-days: 7
+    groups:
+      security:
+        applies-to: security-updates
+        patterns: ["*"]
     labels: [dependencies]
     commit-message:
       prefix: chore
