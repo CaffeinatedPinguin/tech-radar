@@ -27,7 +27,7 @@ The project is intentionally static. There is no backend, database, authenticati
 
 ## Requirements
 
-- Node.js 22.20 or newer
+- Node.js 22.22 or newer
 - pnpm 11 or newer
 - Docker, only when building or running the container image
 
