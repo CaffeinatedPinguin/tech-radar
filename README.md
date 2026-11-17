@@ -1,3 +1,5 @@
+<p align="center"><img src="public/logo/logo-purple.svg" width="96" alt="Smrodek Tech Radar logo"></p>
+
 # Smrodek Tech Radar
 
 [![CI workflow status](https://github.com/CaffeinatedPinguin/tech-radar/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CaffeinatedPinguin/tech-radar/actions/workflows/ci.yml)
@@ -43,27 +45,6 @@ corepack pnpm dev
 Open the Vite URL shown in the terminal. The content compiler must run before the app can load its
 generated runtime contract.
 
-## Repository layout
-
-```text
-radar-data/                # Canonical YAML source content
-  radar.yaml               # Radar title and fixed area definitions
-  technologies/            # Technology records
-  adrs/                    # Architecture decision records
-scripts/build-content.mjs  # Validation and deterministic JSON compiler
-src/                       # React application
-  app/                     # Application shell, routing, and content context
-  content/                 # Runtime content loading and validation
-  domain/                  # Shared content contract and domain types
-  features/                # Feature-specific UI and behavior
-  pages/                   # Route-level page composition
-  shared/                  # Small domain-neutral UI primitives
-public/logo/               # Smrodek logo and public brand assets
-Dockerfile                 # Build and nginx runtime stages
-```
-
-`public/content/content.json` is generated and ignored by Git. Do not edit it by hand.
-
 ## Content workflow
 
 Edit files under `radar-data/`, then regenerate the runtime contract:
@@ -71,6 +52,8 @@ Edit files under `radar-data/`, then regenerate the runtime contract:
 ```bash
 corepack pnpm content:build
 ```
+
+`public/content/content.json` is generated and ignored by Git. Do not edit it by hand.
 
 The compiler reports the source file and field path for invalid data. It checks:
 
@@ -83,23 +66,6 @@ The compiler reports the source file and field path for invalid data. It checks:
 
 The browser loads the generated contract through the Zod schema, so bad runtime data shows a clear
 load error instead of an unsafe cast.
-
-## Development commands
-
-```bash
-corepack pnpm dev              # Start the Vite development server
-corepack pnpm content:build    # Validate YAML and generate content.json
-corepack pnpm test             # Run the Vitest suite once
-corepack pnpm lint             # Check the repository with ESLint
-corepack pnpm lint:fix         # Apply safe ESLint fixes
-corepack pnpm typecheck        # Run the TypeScript compiler without emitting files
-corepack pnpm build            # Generate content and build the frontend
-```
-
-Before a pull request, run the content build, tests, lint, typecheck and production build. CI runs
-the same checks, then builds and smoke-tests the Docker image. `main` needs `ci-required` to be
-green; Dependabot keeps GitHub Actions, npm dependencies and the Docker image current. Version tags
-also run the release job.
 
 ## Docker
 
@@ -133,7 +99,7 @@ the application shell.
 
 1. Create or update the relevant YAML source under `radar-data/`.
 2. Run `corepack pnpm content:build` and review the result locally.
-3. Run the verification commands above.
+3. Run the checks listed in [CONTRIBUTING.md](CONTRIBUTING.md).
 4. Keep changes small and easy to review.
 
 Bug reports and feature requests go through the issue forms. Pull requests from outside contributors
