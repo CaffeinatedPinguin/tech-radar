@@ -26,52 +26,10 @@ pull requests are not accepted. See [CONTRIBUTING.md](CONTRIBUTING.md).
 - Schema validation for YAML content, references, dates and relationship cycles.
 - A minimal nginx image for static deployment.
 
-## Requirements
-
-- Node.js 22.22.2 or newer
-- pnpm 11 or newer
-- Docker, only for the container image
-
-The repository pins pnpm in `package.json`. Corepack keeps local and CI installs on the same version.
-
-## Getting started
+## Run it
 
 ```bash
-corepack pnpm install
-corepack pnpm content:build
-corepack pnpm dev
-```
-
-Open the Vite URL shown in the terminal. The content compiler must run before the app can load its
-generated runtime contract.
-
-## Content workflow
-
-Edit files under `radar-data/`, then regenerate the runtime contract:
-
-```bash
-corepack pnpm content:build
-```
-
-`public/content/content.json` is generated and ignored by Git. Do not edit it by hand.
-
-The compiler reports the source file and field path for invalid data. It checks:
-
-- technology and ADR identifiers;
-- required areas, rings, usages and statuses;
-- ISO dates and URLs;
-- references between technologies and ADRs;
-- duplicate identifiers;
-- replacement and ADR supersession cycles.
-
-The browser loads the generated contract through the Zod schema, so bad runtime data shows a clear
-load error instead of an unsafe cast.
-
-## Docker
-
-```bash
-docker build -t tech-radar .
-docker run --rm -p 8080:8080 tech-radar
+docker run --rm -p 8080:8080 ghcr.io/caffeinatedpinguin/tech-radar:<version>
 ```
 
 The image serves the compiled site through nginx. The health endpoint is `/healthz`.
@@ -81,10 +39,6 @@ The image serves the compiled site through nginx. The health endpoint is `/healt
 Stable tags use `vX.Y.Z`. A matching tag validates the version against `package.json`, runs the full
 verification suite, publishes the image to GHCR and creates a GitHub Release with the commits since
 the previous tag.
-
-```bash
-docker pull ghcr.io/caffeinatedpinguin/tech-radar:vX.Y.Z
-```
 
 Images are in the [GitHub Container Registry package](https://github.com/CaffeinatedPinguin/tech-radar/pkgs/container/tech-radar),
 and releases are listed on the [GitHub Releases page](https://github.com/CaffeinatedPinguin/tech-radar/releases).
@@ -96,11 +50,6 @@ The header and favicon use `public/logo/logo.svg`. The header reads the displaye
 the application shell.
 
 ## Contributing
-
-1. Create or update the relevant YAML source under `radar-data/`.
-2. Run `corepack pnpm content:build` and review the result locally.
-3. Run the checks listed in [CONTRIBUTING.md](CONTRIBUTING.md).
-4. Keep changes small and easy to review.
 
 Bug reports and feature requests go through the issue forms. Pull requests from outside contributors
 are not accepted; see [CONTRIBUTING.md](CONTRIBUTING.md). Content can describe internal architecture,
