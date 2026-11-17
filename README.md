@@ -1,3 +1,5 @@
+<p align="center"><img src="public/logo/logo-purple.svg" width="96" alt="Smrodek Tech Radar logo"></p>
+
 # Smrodek Tech Radar
 
 [![CI workflow status](https://github.com/CaffeinatedPinguin/tech-radar/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CaffeinatedPinguin/tech-radar/actions/workflows/ci.yml)
